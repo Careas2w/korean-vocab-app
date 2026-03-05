@@ -179,9 +179,15 @@ function addWord(){
   korean.value=spanish.value=topicInput.value=unitInput.value="";
 }
 
-/* ---------- Audio (TTS mejorado) ---------- */
+/* ---------- Audio (NEURAL TTS + fallback) ---------- */
+/*
+  Esta app intenta primero TTS neuronal llamando a /api/tts (Netlify/Vercel Function).
+  Si no existe (p.ej. GitHub Pages) o falla, usa speechSynthesis como respaldo.
+*/
 let __voicesLoaded = false;
 let __bestKoVoice = null;
+let __audio = new Audio();
+let __useNeural = true; // si prefieres forzar el TTS del sistema, pon false
 
 function __pickBestKoVoice(){
   const vs = speechSynthesis.getVoices() || [];
@@ -200,11 +206,31 @@ function __ensureVoices(){
   __bestKoVoice = __pickBestKoVoice();
   __voicesLoaded = true;
 }
-
 speechSynthesis.onvoiceschanged = __ensureVoices;
 __ensureVoices();
 
-function speak(txt){
+async function speakNeural(txt){
+  // Llama a tu función serverless (devuelve audio/mpeg)
+  const res = await fetch("/api/tts", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({
+      text: txt,
+      // Opcional: ajusta voz / estilo en el servidor (ver netlify function)
+      rate: audioSpeed
+    })
+  });
+  if(!res.ok) throw new Error("Neural TTS failed: " + res.status);
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  __audio.pause();
+  __audio.src = url;
+  await __audio.play();
+  // Limpieza básica
+  setTimeout(()=>URL.revokeObjectURL(url), 30_000);
+}
+
+function speakFallback(txt){
   speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(txt);
   u.lang="ko-KR";
@@ -215,9 +241,21 @@ function speak(txt){
   }
   if(__bestKoVoice) u.voice = __bestKoVoice;
 
-  setTimeout(()=>{
-    speechSynthesis.speak(u);
-  },50);
+  setTimeout(()=>speechSynthesis.speak(u),50);
+}
+
+async function speak(txt){
+  // Si suena robótico con voces del sistema, deja __useNeural=true y despliega con Netlify/Vercel.
+  if(__useNeural){
+    try{
+      await speakNeural(txt);
+      return;
+    }catch(e){
+      // Si tu web está en GitHub Pages o falta la key, cae al fallback sin romper nada.
+      console.warn(e);
+    }
+  }
+  speakFallback(txt);
 }
 
 function setSpeed(v){

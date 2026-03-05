@@ -1,4 +1,4 @@
-const CACHE_NAME = "korean-vocab-cache-v2";
+const CACHE_NAME = "korean-vocab-neural-v1";
 const URLS = [
   "./",
   "index.html",
