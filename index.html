@@ -4,7 +4,13 @@
 <meta charset="UTF-8">
 <title>한국어 말</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
 <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4caf50">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="한국어 말">
+<link rel="apple-touch-icon" href="icon-192.png">
+
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
@@ -12,34 +18,62 @@ body{font-family:Arial,sans-serif;background:#f4f4f4;padding:6px}
 .container{background:white;padding:8px;max-width:1200px;margin:auto;border-radius:10px}
 h2{margin:6px 0}
 
+.compact{
+  display:grid;
+  grid-template-columns:120px 120px 110px 110px auto;
+  gap:4px;
+}
+
 @media (max-width:800px){
-  .compact{grid-template-columns:1fr;}
+  .compact{
+    grid-template-columns:1fr;
+  }
 }
 input{padding:8px;font-size:16px}
 
 .mini-btn{
-width:44px;height:44px;display:inline-flex;align-items:center;
-justify-content:center;font-size:18px;cursor:pointer;
-touch-action:manipulation;
+  width:44px;
+  height:44px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  cursor:pointer;
+  touch-action:manipulation;
 }
-.mini-btn.small{width:34px;height:34px}
+.mini-btn.small{
+  width:34px;
+  height:34px;
+}
 
-.mini-btn.active{background:#4caf50;color:white;border-radius:4px}
+.mini-btn.active{
+  background:#4caf50;
+  color:white;
+  border-radius:4px;
+}
 
 .top-bar{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
 
 .multi-box{display:flex;gap:6px;flex-wrap:wrap}
 .multi-item{
-padding:4px 8px;border:1px solid #ccc;border-radius:6px;
-cursor:pointer;font-size:13px;
+  padding:4px 8px;
+  border:1px solid #ccc;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:13px;
 }
-.multi-item.active{background:#4caf50;color:white;border-color:#4caf50}
+.multi-item.active{
+  background:#4caf50;
+  color:white;
+  border-color:#4caf50;
+}
 
 table{width:100%;border-collapse:collapse;margin-top:6px;font-size:14px;display:block;overflow-x:auto}
 th,td{border:1px solid #ccc;padding:4px 6px;text-align:left}
 th{background:#eee}
 
 td.coreano{font-size:17px;font-weight:bold;white-space:nowrap}
+td.audio,td.actions{text-align:center;width:40px}
 </style>
 </head>
 
@@ -48,46 +82,46 @@ td.coreano{font-size:17px;font-weight:bold;white-space:nowrap}
 <h2>💬 한국어 말</h2>
 
 <div class="compact">
-<input id="korean" placeholder="Coreano">
-<input id="spanish" placeholder="Español 뜻">
-<input id="topicInput" placeholder="Topic">
-<input id="unitInput" placeholder="Units (coma)">
-<button class="mini-btn" onclick="addWord()">➕</button>
+  <input id="korean" placeholder="Coreano">
+  <input id="spanish" placeholder="Español 뜻">
+  <input id="topicInput" placeholder="Topic">
+  <input id="unitInput" placeholder="Units (coma)">
+  <button class="mini-btn" onclick="addWord()">➕</button>
 </div>
 
 <input id="search" placeholder="🔍 Buscar..." oninput="renderTable()" style="width:100%;margin-top:4px">
 
 <div class="top-bar">
-<button class="mini-btn mode-btn" id="modeStudy" onclick="toggleStudy()">🎓</button>
-<button class="mini-btn mode-btn" id="modeHideKorean" onclick="toggleHideKorean()">🔮</button>
-<button class="mini-btn" onclick="startExam()">🧪</button>
+  <button class="mini-btn mode-btn" id="modeStudy" onclick="toggleStudy()">🎓</button>
+  <button class="mini-btn mode-btn" id="modeHideKorean" onclick="toggleHideKorean()">🔮</button>
+  <button class="mini-btn" onclick="startExam()">🧪</button>
 
-<button class="mini-btn speed-btn" id="speedSnail" onclick="setSpeed(0.4)">🐌</button>
-<button class="mini-btn speed-btn" id="speedSlow" onclick="setSpeed(0.6)">🐢</button>
-<button class="mini-btn speed-btn" id="speedNormal" onclick="setSpeed(1)">▶</button>
-<button class="mini-btn speed-btn" id="speedFast" onclick="setSpeed(1.2)">🐇</button>
+  <button class="mini-btn speed-btn" id="speedSnail" onclick="setSpeed(0.4)">🐌</button>
+  <button class="mini-btn speed-btn" id="speedSlow" onclick="setSpeed(0.6)">🐢</button>
+  <button class="mini-btn speed-btn" id="speedNormal" onclick="setSpeed(1)">▶</button>
+  <button class="mini-btn speed-btn" id="speedFast" onclick="setSpeed(1.2)">🐇</button>
 
-<button class="mini-btn sort-btn" id="sortBtn" onclick="toggleSort()">🔤</button>
-<button class="mini-btn" onclick="exportXLSX()">🚀</button>
+  <button class="mini-btn sort-btn" id="sortBtn" onclick="toggleSort()">🔤</button>
+  <button class="mini-btn" onclick="exportXLSX()">🚀</button>
 
-<div class="multi-box" id="unitBox"></div>
-<div class="multi-box" id="topicBox"></div>
+  <div class="multi-box" id="unitBox"></div>
+  <div class="multi-box" id="topicBox"></div>
 
-<button class="mini-btn" onclick="deleteAllWords()">🧹</button>
+  <button class="mini-btn" onclick="deleteAllWords()">🧹</button>  
 
-<input type="file" id="fileInput" accept=".xlsx">
-<button class="mini-btn" id="importBtn">💡</button>
+  <input type="file" id="fileInput" accept=".xlsx">
+  <button class="mini-btn" id="importBtn">💡</button>
 </div>
 
 <table>
 <thead>
 <tr>
-<th>🔊</th>
-<th>Coreano</th>
-<th>Español 뜻</th>
-<th>Topic</th>
-<th>Unit(s)</th>
-<th>⚙</th>
+  <th>🔊</th>
+  <th>Coreano</th>
+  <th>Español 뜻</th>
+  <th>Topic</th>
+  <th>Unit(s)</th>
+  <th>⚙</th>
 </tr>
 </thead>
 <tbody id="table"></tbody>
@@ -103,341 +137,276 @@ let selectedUnits=["__ALL__"], selectedTopics=["__ALL__"];
 let sortActive=false;
 let pendingImport=[];
 
-/* ---------- TTS MEJORADO ---------- */
-let voices=[];
-let koreanVoice=null;
-
-function loadVoices(){
-voices = speechSynthesis.getVoices();
-
-koreanVoice = voices.find(v =>
-v.lang==="ko-KR" &&
-(v.name.includes("Premium") ||
-v.name.includes("Enhanced") ||
-v.name.includes("Google"))
-);
-
-if(!koreanVoice){
-koreanVoice = voices.find(v=>v.lang==="ko-KR");
-}
-}
-
-speechSynthesis.onvoiceschanged = loadVoices;
-loadVoices();
-
-function speak(txt){
-speechSynthesis.cancel();
-const u = new SpeechSynthesisUtterance(txt);
-u.lang="ko-KR";
-u.rate=audioSpeed;
-if(koreanVoice) u.voice=koreanVoice;
-
-setTimeout(()=>speechSynthesis.speak(u),50);
-}
-
-/* ---------- NORMALIZADOR ---------- */
+/* ---------- NORMALIZADOR DE TEXTO ---------- */
 function normalizeText(text){
-return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"") // elimina tildes
+    .trim();
 }
 
 /* ---------- Guardado ---------- */
 function saveAll(){
-localStorage.setItem("words",JSON.stringify(words));
+  localStorage.setItem("words",JSON.stringify(words));
 }
 
 /* ---------- Orden ---------- */
 function toggleSort(){
-sortActive=!sortActive;
-sortBtn.classList.toggle("active",sortActive);
+  sortActive=!sortActive;
+  sortBtn.classList.toggle("active",sortActive);
 
-words.sort(sortActive
-? (a,b)=>a.k.localeCompare(b.k,"ko")
-: (a,b)=>a.order-b.order
-);
-
-renderTable();
+  words.sort(sortActive
+    ? (a,b)=>a.k.localeCompare(b.k,"ko")
+    : (a,b)=>a.order-b.order
+  );
+  renderTable();
 }
 
 /* ---------- Añadir ---------- */
 function addWord(){
-const k=korean.value.trim(), s=spanish.value.trim(), t=topicInput.value.trim();
-const u=unitInput.value.trim();
-if(!k||!s||!t||words.some(w=>w.k===k)) return;
+  const k=korean.value.trim(), s=spanish.value.trim(), t=topicInput.value.trim();
+  const u=unitInput.value.trim();
+  if(!k||!s||!t||words.some(w=>w.k===k)) return;
 
-words.push({
-order: nextOrder++,
-k, s, topic:t,
-units: u?u.split(",").map(x=>x.trim()).filter(Boolean):[]
-});
+  words.push({
+    order: nextOrder++,
+    k, s, topic:t,
+    units: u?u.split(",").map(x=>x.trim()).filter(Boolean):[]
+  });
 
-saveAll();
-renderTable();
-
-korean.value="";
-spanish.value="";
-topicInput.value="";
-unitInput.value="";
+  saveAll(); renderTable();
+  korean.value=spanish.value=topicInput.value=unitInput.value="";
 }
 
-/* ---------- Velocidad ---------- */
+/* ---------- Audio (TTS mejorado) ---------- */
+let __voicesLoaded = false;
+let __bestKoVoice = null;
+
+function __pickBestKoVoice(){
+  const vs = speechSynthesis.getVoices() || [];
+  if(!vs.length) return null;
+
+  const preferred = vs.find(v =>
+    v.lang === "ko-KR" &&
+    (/premium|enhanced|neural|google/i.test(v.name) || /premium|enhanced|neural/i.test(v.voiceURI || ""))
+  );
+  if(preferred) return preferred;
+
+  return vs.find(v => v.lang === "ko-KR") || null;
+}
+
+function __ensureVoices(){
+  __bestKoVoice = __pickBestKoVoice();
+  __voicesLoaded = true;
+}
+
+speechSynthesis.onvoiceschanged = __ensureVoices;
+__ensureVoices();
+
+function speak(txt){
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(txt);
+  u.lang="ko-KR";
+  u.rate=audioSpeed;
+
+  if(!__voicesLoaded || !__bestKoVoice){
+    __bestKoVoice = __pickBestKoVoice();
+  }
+  if(__bestKoVoice) u.voice = __bestKoVoice;
+
+  setTimeout(()=>{
+    speechSynthesis.speak(u);
+  },50);
+}
+
 function setSpeed(v){
-audioSpeed=v;
-document.querySelectorAll(".speed-btn").forEach(b=>b.classList.remove("active"));
-if(v===1) speedNormal.classList.add("active");
-if(v===1.2) speedFast.classList.add("active");
-if(v===0.6) speedSlow.classList.add("active");
-if(v===0.4) speedSnail.classList.add("active");
+  audioSpeed=v;
+  document.querySelectorAll(".speed-btn").forEach(b=>b.classList.remove("active"));
+  if(v===1) speedNormal.classList.add("active");
+  if(v===1.2) speedFast.classList.add("active");
+  if(v===0.6) speedSlow.classList.add("active");
+  if(v===0.4) speedSnail.classList.add("active");
 }
 setSpeed(1);
 
 /* ---------- Modos ---------- */
 function toggleStudy(){
-studyMode=!studyMode;
-hideKoreanMode=false;
+  studyMode=!studyMode;
+  hideKoreanMode=false;
 
-modeStudy.classList.toggle("active",studyMode);
-modeHideKorean.classList.remove("active");
+  modeStudy.classList.toggle("active",studyMode);
+  modeHideKorean.classList.remove("active");
 
-renderTable();
+  renderTable();
 }
 
 function toggleHideKorean(){
-hideKoreanMode=!hideKoreanMode;
-studyMode=false;
+  hideKoreanMode=!hideKoreanMode;
+  studyMode=false;
 
-modeHideKorean.classList.toggle("active",hideKoreanMode);
-modeStudy.classList.remove("active");
+  modeHideKorean.classList.toggle("active",hideKoreanMode);
+  modeStudy.classList.remove("active");
 
-renderTable();
+  renderTable();
 }
 
 /* ---------- Tabla ---------- */
 function renderTable(){
-const q = normalizeText(search.value);
-table.innerHTML="";
+  const q = normalizeText(search.value);
+  table.innerHTML="";
 
-words.forEach((w,i)=>{
+  words.forEach((w,i)=>{
+    if(!selectedUnits.includes("__ALL__")&&!w.units.some(u=>selectedUnits.includes(u))) return;
+    if(!selectedTopics.includes("__ALL__")&&!selectedTopics.includes(w.topic)) return;
+    if(q){
+      const koreanMatch = normalizeText(w.k).includes(q);
+      const spanishMatch = normalizeText(w.s).includes(q);
+      if(!koreanMatch && !spanishMatch) return;
+    }
 
-if(!selectedUnits.includes("__ALL__")&&!w.units.some(u=>selectedUnits.includes(u))) return;
-if(!selectedTopics.includes("__ALL__")&&!selectedTopics.includes(w.topic)) return;
+    const r=table.insertRow();
+    r.insertCell(0).innerHTML=`<button class="mini-btn" onclick="speak('${w.k}')">▶</button>`;
+    r.insertCell(1).textContent=hideKoreanMode?"••••":w.k; r.cells[1].className="coreano";
+    r.insertCell(2).textContent=studyMode?"••••":w.s;
+    r.insertCell(3).textContent=w.topic;
+    r.insertCell(4).textContent=w.units.join(", ");
+    r.insertCell(5).innerHTML=`
+      <button class="mini-btn small" onclick="editWord(${i})">✏️</button>
+      <button class="mini-btn small" onclick="deleteWord(${i})">🗑</button>`;
+  });
 
-if(q){
-const koreanMatch = normalizeText(w.k).includes(q);
-const spanishMatch = normalizeText(w.s).includes(q);
-if(!koreanMatch && !spanishMatch) return;
-}
-
-const r=table.insertRow();
-r.insertCell(0).innerHTML=`<button class="mini-btn" onclick="speak('${w.k}')">▶</button>`;
-r.insertCell(1).textContent=hideKoreanMode?"••••":w.k;
-r.insertCell(1).className="coreano";
-r.insertCell(2).textContent=studyMode?"••••":w.s;
-r.insertCell(3).textContent=w.topic;
-r.insertCell(4).textContent=w.units.join(", ");
-r.insertCell(5).innerHTML=`
-<button class="mini-btn small" onclick="editWord(${i})">✏️</button>
-<button class="mini-btn small" onclick="deleteWord(${i})">🗑</button>`;
-
-});
-
-renderFilters();
+  renderFilters();
 }
 
 /* ---------- Filtros ---------- */
 function renderFilters(){
-const units=new Set(), topics=new Set();
+  const units=new Set(), topics=new Set();
+  words.forEach(w=>{
+    w.units.forEach(u=>units.add(u));
+    topics.add(w.topic);
+  });
 
-words.forEach(w=>{
-w.units.forEach(u=>units.add(u));
-topics.add(w.topic);
-});
+  renderMulti(unitBox,"📁 Units",[...units],selectedUnits,a=>{
+    selectedUnits=a; selectedTopics=["__ALL__"];
+  });
 
-renderMulti(unitBox,"📁 Units",[...units],selectedUnits,a=>{
-selectedUnits=a; selectedTopics=["__ALL__"];
-});
+  const filteredTopics = selectedUnits.includes("__ALL__")
+    ? [...topics]
+    : [...topics].filter(t=>words.some(w=>w.topic===t&&w.units.some(u=>selectedUnits.includes(u))));
 
-const filteredTopics = selectedUnits.includes("__ALL__")
-? [...topics]
-: [...topics].filter(t=>words.some(w=>w.topic===t&&w.units.some(u=>selectedUnits.includes(u))));
-
-renderMulti(topicBox,"📚 Topics",filteredTopics,selectedTopics,a=>selectedTopics=a);
+  renderMulti(topicBox,"📚 Topics",filteredTopics,selectedTopics,a=>selectedTopics=a);
 }
 
 /* ---------- Multi ---------- */
 function renderMulti(box,label,values,selected,onChange){
+  box.innerHTML="";
+  const all=document.createElement("div");
+  all.textContent=label;
+  all.className="multi-item"+(selected.includes("__ALL__")?" active":"");
+  all.onclick=()=>{onChange(["__ALL__"]);renderTable()};
+  box.appendChild(all);
 
-box.innerHTML="";
-
-const all=document.createElement("div");
-all.textContent=label;
-all.className="multi-item"+(selected.includes("__ALL__")?" active":"");
-
-all.onclick=()=>{onChange(["__ALL__"]);renderTable()};
-
-box.appendChild(all);
-
-values.forEach(v=>{
-
-const d=document.createElement("div");
-d.textContent=v;
-d.className="multi-item"+(selected.includes(v)?" active":"");
-
-d.onclick=()=>{
-let arr = selected.includes("__ALL__") ? [v]
-: selected.includes(v) ? selected.filter(x=>x!==v)
-: [...selected,v];
-
-onChange(arr);
-renderTable();
-};
-
-box.appendChild(d);
-
-});
-
+  values.forEach(v=>{
+    const d=document.createElement("div");
+    d.textContent=v;
+    d.className="multi-item"+(selected.includes(v)?" active":"");
+    d.onclick=()=>{
+      let arr = selected.includes("__ALL__") ? [v]
+        : selected.includes(v) ? selected.filter(x=>x!==v) : [...selected,v];
+      onChange(arr); renderTable();
+    };
+    box.appendChild(d);
+  });
 }
 
 /* ---------- Editar / borrar ---------- */
 function editWord(i){
-const w=words[i];
-
-const nk=prompt("Coreano:",w.k);
-const ns=prompt("Español 뜻:",w.s);
-const nt=prompt("Topic:",w.topic);
-const nu=prompt("Units:",w.units.join(","));
-
-if(nk&&ns&&nt){
-
-words[i]={
-...w,
-k:nk,
-s:ns,
-topic:nt,
-units:nu?nu.split(",").map(x=>x.trim()).filter(Boolean):[]
-};
-
-saveAll();
-renderTable();
+  const w=words[i];
+  const nk=prompt("Coreano:",w.k),
+        ns=prompt("Español 뜻:",w.s),
+        nt=prompt("Topic:",w.topic),
+        nu=prompt("Units:",w.units.join(","));
+  if(nk&&ns&&nt){
+    words[i]={...w,k:nk,s:ns,topic:nt,
+      units:nu?nu.split(",").map(x=>x.trim()).filter(Boolean):[]};
+    saveAll(); renderTable();
+  }
 }
-}
-
 function deleteWord(i){
-if(confirm("¿Borrar palabra?")){
-words.splice(i,1);
-saveAll();
-renderTable();
+  if(confirm("¿Borrar palabra?")){
+    words.splice(i,1);
+    saveAll(); renderTable();
+  }
 }
-}
-
 function deleteAllWords(){
-if(confirm("¿Eliminar TODAS las palabras?")){
-words=[];
-nextOrder=1;
-saveAll();
-renderTable();
-}
+  if(confirm("¿Eliminar TODAS las palabras?")){
+    words=[]; nextOrder=1;
+    saveAll(); renderTable();
+  }
 }
 
 /* ---------- Excel ---------- */
 function exportXLSX(){
-
-const data=[["coreano","español 뜻","topic","units"]];
-
-words.forEach(w=>{
-data.push([w.k,w.s,w.topic,w.units.join(",")]);
-});
-
-const wb=XLSX.utils.book_new();
-
-XLSX.utils.book_append_sheet(
-wb,
-XLSX.utils.aoa_to_sheet(data),
-"Vocabulario"
-);
-
-XLSX.writeFile(wb,"vocabulario_coreano.xlsx");
-
+  const data=[["coreano","español 뜻","topic","units"]];
+  words.forEach(w=>data.push([w.k,w.s,w.topic,w.units.join(",")]));
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(data),"Vocabulario");
+  XLSX.writeFile(wb,"vocabulario_coreano.xlsx");
 }
 
 /* ---------- Importar Excel ---------- */
 fileInput.addEventListener("change",e=>{
-
-const reader=new FileReader();
-
-reader.onload=ev=>{
-
-const wb=XLSX.read(
-new Uint8Array(ev.target.result),
-{type:"array"}
-);
-
-pendingImport = XLSX.utils.sheet_to_json(
-wb.Sheets[wb.SheetNames[0]],
-{header:1}
-).slice(1);
-
-importBtn.style.display="inline-flex";
-
-};
-
-reader.readAsArrayBuffer(e.target.files[0]);
-
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const wb=XLSX.read(new Uint8Array(ev.target.result),{type:"array"});
+    pendingImport = XLSX.utils.sheet_to_json(
+      wb.Sheets[wb.SheetNames[0]],
+      {header:1}
+    ).slice(1);
+    importBtn.style.display="inline-flex";
+  };
+  reader.readAsArrayBuffer(e.target.files[0]);
 });
 
 importBtn.onclick=()=>{
+  if(!pendingImport.length){
+    alert("Primero selecciona un archivo Excel");
+    return;
+  }
 
-if(!pendingImport.length){
-alert("Primero selecciona un archivo Excel");
-return;
-}
+  pendingImport.forEach(r=>{
+    const k=String(r[0]||"").trim();
+    const s=String(r[1]||"").trim();
+    const t=String(r[2]||"").trim();
+    const u=String(r[3]||"").trim();
+    if(!k||!s||!t||words.some(w=>w.k===k)) return;
 
-pendingImport.forEach(r=>{
-
-const k=String(r[0]||"").trim();
-const s=String(r[1]||"").trim();
-const t=String(r[2]||"").trim();
-const u=String(r[3]||"").trim();
-
-if(!k||!s||!t||words.some(w=>w.k===k)) return;
-
-words.push({
-order: nextOrder++,
-k,s,topic:t,
-units: u?u.split(",").map(x=>x.trim()).filter(Boolean):[]
-});
-
-});
-
-pendingImport=[];
-saveAll();
-renderTable();
-
-alert("Importación completada");
-
+    words.push({
+      order: nextOrder++,
+      k,s,topic:t,
+      units: u?u.split(",").map(x=>x.trim()).filter(Boolean):[]
+    });
+  });
+  pendingImport=[];
+  saveAll(); renderTable();
+  alert("Importación completada");
 };
 
 /* ---------- Examen ---------- */
 function startExam(){
-
-if(!words.length) return;
-
-const w=words[Math.floor(Math.random()*words.length)];
-
-speak(w.k);
-
-const r=prompt(`¿Significado de "${w.k}"?`);
-
-alert(r?.toLowerCase()===w.s.toLowerCase()
-?"✅ Correcto"
-:`❌ ${w.s}`);
-
+  if(!words.length) return;
+  const w=words[Math.floor(Math.random()*words.length)];
+  speak(w.k);
+  const r=prompt(`¿Significado de "${w.k}"?`);
+  alert(r?.toLowerCase()===w.s.toLowerCase()?"✅ Correcto":`❌ ${w.s}`);
 }
 
 renderTable();
 
 /* ---------- PWA ---------- */
 if("serviceWorker" in navigator){
-navigator.serviceWorker.register("service-worker.js");
+  navigator.serviceWorker.register("service-worker.js");
 }
 </script>
 </body>
