@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Flashcards Coreano Pro</title>
-  <meta name="description" content="App web para estudiar vocabulario coreano con flashcards, escritura, múltiple, pairs, diccionario y tablas editables." />
+  <title>한국어 말</title>
+  <meta name="description" content="한국어 말. Web app para estudiar vocabulario coreano desde cualquier dispositivo." />
 
   <meta name="theme-color" content="#8b5cf6" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Flashcards Coreano" />
+  <meta name="apple-mobile-web-app-title" content="한국어 말" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="application-name" content="Flashcards Coreano" />
+  <meta name="application-name" content="한국어 말" />
   <meta name="format-detection" content="telephone=no" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png" />
@@ -1463,6 +1463,26 @@
     .title{ font-size:21px; letter-spacing:-.02em; }
     .brand-subtitle{ font-size:12px; color:var(--muted); margin-top:2px; }
 
+    .brand-badge{
+      font-size:24px;
+      line-height:1;
+    }
+
+    .hero-banner-simple{
+      align-items:center;
+    }
+
+    .hero-banner-simple h1{
+      margin:0 0 6px;
+    }
+
+    .hero-banner-simple p{
+      margin:0;
+      font-size:20px;
+      font-weight:700;
+      color:var(--text);
+    }
+
     .app-note{
       margin:6px 0 12px; padding:10px 12px; border-radius:14px;
       background:linear-gradient(135deg, rgba(139,92,246,.14), rgba(99,102,241,.08));
@@ -1564,7 +1584,7 @@
   <div class="layout">
     <aside class="sidebar">
       <div class="sidebar-top">
-        <div class="brand-wrap"><div class="brand-badge">한</div><div><div class="title">Flashcards Coreano</div><div class="brand-subtitle">Studio de estudio multiplataforma</div></div></div>
+        <div class="brand-wrap"><div class="brand-badge" aria-label="Bandera de Corea" title="Corea">🇰🇷</div><div><div class="title">Flashcards Coreano</div><div class="brand-subtitle">한국어 말</div></div></div>
         <div class="study-group">
           <button class="icon-btn" id="paletteBtn" title="Cambiar colores">🎨</button>
           <button class="icon-btn" id="themeBtn" title="Cambiar tema">☀</button>
@@ -1583,7 +1603,6 @@
         <button class="small-btn" id="clearFilterBtn" title="Quitar filtros">Quitar filtros</button>
       </div>
 
-      <div class="app-note">Sube tu Excel, filtra por unit y topic, y practica desde cualquier dispositivo.</div>
 
       <div class="search-box">
         <input class="search-input" id="searchInput" type="text" placeholder="Buscar..." />
@@ -1608,18 +1627,10 @@
     </aside>
 
     <main class="main">
-      <div class="hero-banner">
+      <div class="hero-banner hero-banner-simple">
         <div>
-          <div class="hero-eyebrow">Aprendizaje inteligente</div>
-          <h1>Tu cuaderno digital de vocabulario coreano</h1>
-          <p>Todo en una sola app: tabla editable, audio, listas estrella, falladas y modos de estudio sin perder datos.</p>
-        </div>
-        <div class="hero-pills">
-          <span class="hero-pill">PC</span>
-          <span class="hero-pill">Móvil</span>
-          <span class="hero-pill">iPad</span>
-          <span class="hero-pill">PWA</span>
-          <button class="hero-update-btn" id="refreshAppBtn" type="button" title="Actualizar la web">🔄 Actualizar web</button>
+          <h1>한국어 말</h1>
+          <p>Korean is fun</p>
         </div>
       </div>
 
@@ -1660,6 +1671,7 @@
         </div>
 
         <div class="display-controls">
+          <button class="mode-btn" id="refreshAppBtn" type="button" title="Actualizar la web">🔄 Actualizar web</button>
           <div class="style-box">
             <span class="style-label">Tabla</span>
             <button class="small-btn" id="tableBoldBtn">Negrita: Sí</button>

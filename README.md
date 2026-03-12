@@ -1,27 +1,30 @@
-# Flashcards Coreano - GitHub Pages
+# 한국어 말 - GitHub Pages
 
-Este paquete está listo para subirlo a GitHub y publicarlo gratis con GitHub Pages.
+Este paquete está preparado para subirlo a GitHub y publicar la web con GitHub Pages.
 
-## Archivos
-- `index.html`: tu app principal
-- `manifest.webmanifest`: configuración para instalar la web en pantalla de inicio
-- `sw.js`: service worker para soporte PWA básico
-- `icons/`: iconos de la app
+## Archivos incluidos
+- `index.html`: app principal ya actualizada
+- `manifest.webmanifest`: configuración PWA
+- `sw.js`: service worker para caché básica
+- `icons/`: iconos y favicon basados en la bandera de Corea
 - `.nojekyll`: evita procesado innecesario en GitHub Pages
 
-## Despliegue rápido
+## Despliegue en GitHub Pages
 1. Crea un repositorio nuevo en GitHub.
-2. Sube todos estos archivos tal como están.
-3. Ve a **Settings > Pages**.
+2. Sube todos los archivos de este paquete manteniendo la misma estructura.
+3. En GitHub ve a **Settings > Pages**.
 4. En **Build and deployment**, elige **Deploy from a branch**.
-5. En **Branch**, elige **main** y carpeta **/(root)**.
-6. Guarda.
-7. Espera 1-3 minutos hasta que GitHub publique tu web.
+5. Selecciona la rama **main** y la carpeta **/(root)**.
+6. Guarda los cambios.
+7. Tras unos minutos, la web quedará publicada.
 
-Tu URL será parecida a:
+La URL tendrá este formato:
 `https://TU_USUARIO.github.io/NOMBRE_DEL_REPO/`
 
-## Añadir a pantalla de inicio
-- iPhone/iPad (Safari): Compartir > Añadir a pantalla de inicio
-- Android (Chrome): menú > Instalar app o Añadir a pantalla principal
-- PC (Chrome/Edge): icono de instalar en la barra de direcciones o menú > Instalar app
+## Instalación como app
+- **iPhone/iPad (Safari):** Compartir → Añadir a pantalla de inicio
+- **Android (Chrome):** menú → Instalar app / Añadir a pantalla principal
+- **PC (Chrome/Edge):** icono de instalar en la barra de direcciones
+
+## Nota
+El botón **Actualizar web** sigue disponible dentro de la barra principal de controles de la app.
