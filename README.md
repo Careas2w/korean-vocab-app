@@ -1,24 +1,27 @@
-# 한국어 말 — PWA + Neural TTS (voz neuronal)
+# Flashcards Coreano - GitHub Pages
 
-Este paquete funciona de 2 formas:
+Este paquete está listo para subirlo a GitHub y publicarlo gratis con GitHub Pages.
 
-1) **Sin backend (GitHub Pages):** usa la voz del sistema (speechSynthesis) como respaldo.
-2) **Con voz neuronal (recomendado):** despliega en **Netlify** y activa la Function `/api/tts`.
-   - Así el botón ▶ usa TTS neuronal (OpenAI Speech API) y suena mucho más natural.
+## Archivos
+- `index.html`: tu app principal
+- `manifest.webmanifest`: configuración para instalar la web en pantalla de inicio
+- `sw.js`: service worker para soporte PWA básico
+- `icons/`: iconos de la app
+- `.nojekyll`: evita procesado innecesario en GitHub Pages
 
-## Opción A — GitHub Pages (solo fallback)
-- Sube `index.html`, `manifest.json`, `service-worker.js`, `icon-192.png`
-- Funciona, pero el audio depende de las voces del iPad.
+## Despliegue rápido
+1. Crea un repositorio nuevo en GitHub.
+2. Sube todos estos archivos tal como están.
+3. Ve a **Settings > Pages**.
+4. En **Build and deployment**, elige **Deploy from a branch**.
+5. En **Branch**, elige **main** y carpeta **/(root)**.
+6. Guarda.
+7. Espera 1-3 minutos hasta que GitHub publique tu web.
 
-## Opción B — Netlify (voz neuronal)
-1. Crea una cuenta en Netlify.
-2. Importa tu repo (o arrastra la carpeta del proyecto).
-3. En **Site settings → Environment variables** añade:
-   - `OPENAI_API_KEY` = tu clave de OpenAI
-4. Asegúrate de que la carpeta `netlify/functions/tts.js` está incluida en el deploy.
-5. Publica.
+Tu URL será parecida a:
+`https://TU_USUARIO.github.io/NOMBRE_DEL_REPO/`
 
-Cuando exista `/api/tts`, la app lo usa automáticamente. Si falla, vuelve al fallback.
-
-## Instalación en iPad
-Safari → Compartir → Añadir a pantalla de inicio.
+## Añadir a pantalla de inicio
+- iPhone/iPad (Safari): Compartir > Añadir a pantalla de inicio
+- Android (Chrome): menú > Instalar app o Añadir a pantalla principal
+- PC (Chrome/Edge): icono de instalar en la barra de direcciones o menú > Instalar app
