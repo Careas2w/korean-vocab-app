@@ -1619,6 +1619,7 @@
           <span class="hero-pill">Móvil</span>
           <span class="hero-pill">iPad</span>
           <span class="hero-pill">PWA</span>
+          <button class="hero-update-btn" id="refreshAppBtn" type="button" title="Actualizar la web">🔄 Actualizar web</button>
         </div>
       </div>
 
@@ -2100,6 +2101,7 @@
     const celebrationTitle = document.getElementById("celebrationTitle");
     const celebrationSubtitle = document.getElementById("celebrationSubtitle");
     const celebrationScore = document.getElementById("celebrationScore");
+    const refreshAppBtn = document.getElementById("refreshAppBtn");
 
     applySavedTheme();
     applySavedPalette();
@@ -3112,6 +3114,11 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
         writeInput.value = "";
         writeResult.textContent = "";
         writeStarBtn.textContent = "☆";
+        writePrevBtn.disabled = true;
+        writeNextBtn.disabled = true;
+        writePrevBtn.style.opacity = ".5";
+        writeNextBtn.style.opacity = ".5";
+        writeNextBtn.textContent = "Siguiente →";
         updateProgress(writeProgressFill, writeProgressText, 0, 0);
         return;
       }
@@ -3123,6 +3130,11 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       writeResult.textContent = "";
       writeResult.className = "write-result";
       writeStarBtn.textContent = starredWords.has(row.id) ? "⭐" : "☆";
+      writePrevBtn.disabled = writeIndex === 0;
+      writeNextBtn.disabled = false;
+      writePrevBtn.style.opacity = writePrevBtn.disabled ? ".5" : "1";
+      writeNextBtn.style.opacity = "1";
+      writeNextBtn.textContent = writeIndex >= writeData.length - 1 ? "✅ Finalizar" : "Siguiente →";
       updateProgress(writeProgressFill, writeProgressText, writeIndex, writeData.length);
     }
 
@@ -3223,6 +3235,11 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
         quizDefinition.textContent = "No hay palabras";
         quizOptions.innerHTML = "";
         quizCounter.textContent = "0 de 0";
+        quizPrevBtn.disabled = true;
+        quizNextBtn.disabled = true;
+        quizPrevBtn.style.opacity = ".5";
+        quizNextBtn.style.opacity = ".5";
+        quizNextBtn.textContent = "Siguiente →";
         updateProgress(quizProgressFill, quizProgressText, 0, 0);
         return;
       }
@@ -3263,9 +3280,10 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
       });
 
       quizPrevBtn.disabled = quizIndex === 0;
-      quizNextBtn.disabled = quizIndex === quizData.length - 1;
+      quizNextBtn.disabled = false;
       quizPrevBtn.style.opacity = quizPrevBtn.disabled ? ".5" : "1";
-      quizNextBtn.style.opacity = quizNextBtn.disabled ? ".5" : "1";
+      quizNextBtn.style.opacity = "1";
+      quizNextBtn.textContent = quizIndex >= quizData.length - 1 ? "✅ Finalizar" : "Siguiente →";
     }
 
     quizSpeakBtn.addEventListener("click", () => {
@@ -3648,6 +3666,32 @@ ${row.topic ? `<strong>Topic:</strong> ${escapeHtml(row.topic)}` : ""}
     if("speechSynthesis" in window){
       speechSynthesis.getVoices();
       speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
+    }
+
+    async function refreshAppNow(){
+      if(refreshAppBtn){
+        refreshAppBtn.classList.add('updating');
+        refreshAppBtn.textContent = '⏳ Actualizando...';
+      }
+      try{
+        if('serviceWorker' in navigator){
+          const regs = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(regs.map(reg => reg.unregister()));
+        }
+        if('caches' in window){
+          const keys = await caches.keys();
+          await Promise.all(keys.map(key => caches.delete(key)));
+        }
+      }catch(err){
+        console.warn('No se pudo limpiar la caché de la app:', err);
+      }
+      const url = new URL(window.location.href);
+      url.searchParams.set('updated', Date.now().toString());
+      window.location.replace(url.toString());
+    }
+
+    if(refreshAppBtn){
+      refreshAppBtn.addEventListener('click', refreshAppNow);
     }
 
     renderDictResults();
